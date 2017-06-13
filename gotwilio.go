@@ -60,7 +60,7 @@ func (twilio *Twilio) post(formValues url.Values, twilioUrl string) (*http.Respo
 }
 
 func (twilio *Twilio) get(twilioUrl string) (*http.Response, error) {
-	req, err := http.NewRequest("GET", twilioUrl, strings.NewReader(""))
+	req, err := http.NewRequest("GET", twilioUrl, nil)
 	if err != nil {
 		return nil, err
 	}
