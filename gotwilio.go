@@ -7,13 +7,21 @@ import (
 	"strings"
 )
 
+const (
+	twilioUrl       = "https://api.twilio.com/2010-04-01"
+	twilioLookupUrl = "https://lookups.twilio.com/v1"
+	twilioNotifyUrl = "https://notify.twilio.com/v1"
+)
+
 // Twilio stores basic information important for connecting to the
 // twilio.com REST api such as AccountSid and AuthToken.
 type Twilio struct {
 	AccountSid    string
+	NotifySid     string
 	AuthToken     string
 	BaseUrl       string
 	LookupBaseUrl string
+	NotifyUrl     string
 	HTTPClient    *http.Client
 }
 
@@ -26,21 +34,17 @@ type Exception struct {
 }
 
 // Create a new Twilio struct.
-func NewTwilioClient(accountSid, authToken string) *Twilio {
-	return NewTwilioClientCustomHTTP(accountSid, authToken, nil)
+func NewTwilioClient(accountSid, notifySid, authToken string) *Twilio {
+	return NewTwilioClientCustomHTTP(accountSid, notifySid, authToken, nil)
 }
 
 // Create a new Twilio client, optionally using a custom http.Client
-func NewTwilioClientCustomHTTP(accountSid, authToken string, HTTPClient *http.Client) *Twilio {
-	// Should these be moved into constants?
-	twilioUrl := "https://api.twilio.com/2010-04-01"
-	twilioLookupUrl := "https://lookups.twilio.com/v1/PhoneNumbers/"
-
+func NewTwilioClientCustomHTTP(accountSid, notifySid, authToken string, HTTPClient *http.Client) *Twilio {
 	if HTTPClient == nil {
 		HTTPClient = http.DefaultClient
 	}
 
-	return &Twilio{accountSid, authToken, twilioUrl, twilioLookupUrl, HTTPClient}
+	return &Twilio{accountSid, notifySid, authToken, twilioUrl, twilioLookupUrl, twilioNotifyUrl, HTTPClient}
 }
 
 func (twilio *Twilio) post(formValues url.Values, twilioUrl string) (*http.Response, error) {

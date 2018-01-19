@@ -16,7 +16,7 @@ type LookupResponse struct {
 
 // Lookup method
 func (twilio *Twilio) Lookup(phone string) (lookupResponse *LookupResponse, exception *Exception, err error) {
-	twilioUrl := twilio.LookupBaseUrl + phone
+	twilioUrl := twilio.LookupBaseUrl + "/PhoneNumbers/" + phone
 
 	res, err := twilio.get(twilioUrl)
 	if err != nil {
